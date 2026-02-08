@@ -1,0 +1,151 @@
+-- MozCraft Installer Dialog (2026.02) - Final
+
+local Players = game:GetService("Players")
+local StarterGui = game:GetService("StarterGui")
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
+
+-- Remove existing
+if PlayerGui:FindFirstChild("MCDialog") then
+    PlayerGui.MCDialog:Destroy()
+end
+
+local ICON_ID = "rbxassetid://90292593237256"
+local FONT_TEXT = Enum.Font.Code
+
+-- ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "MCDialog"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = PlayerGui
+
+-- Outer frame
+local outer = Instance.new("Frame")
+outer.Size = UDim2.new(0, 380, 0, 260)
+outer.Position = UDim2.new(0.5, -190, 0.5, -130)
+outer.BackgroundColor3 = Color3.fromRGB(20,20,20)
+outer.BackgroundTransparency = 0.15
+outer.BorderSizePixel = 1
+outer.BorderColor3 = Color3.fromRGB(0,0,0)
+outer.Parent = screenGui
+
+-- Click sound
+local clickSound = Instance.new("Sound")
+clickSound.SoundId = "rbxassetid://535716488"
+clickSound.Volume = 1
+clickSound.Parent = outer
+
+-- Title
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 32)
+title.BackgroundTransparency = 1
+title.Text = "Notification"
+title.TextColor3 = Color3.fromRGB(255,255,255)
+title.Font = FONT_TEXT
+title.TextSize = 20
+title.Parent = outer
+
+-- Text area
+local textArea = Instance.new("Frame")
+textArea.Size = UDim2.new(1, -20, 0, 110)
+textArea.Position = UDim2.new(0, 10, 0, 40)
+textArea.BackgroundColor3 = Color3.fromRGB(10,10,10)
+textArea.BackgroundTransparency = 0.2
+textArea.BorderSizePixel = 0
+textArea.Parent = outer
+
+-- Icon
+local icon = Instance.new("ImageLabel")
+icon.Size = UDim2.new(0, 32, 0, 32)
+icon.Position = UDim2.new(0, 8, 0, 8)
+icon.BackgroundTransparency = 1
+icon.Image = ICON_ID
+icon.Parent = textArea
+
+-- Text
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(1, -56, 1, -16)
+textLabel.Position = UDim2.new(0, 48, 0, 8)
+textLabel.BackgroundTransparency = 1
+textLabel.TextColor3 = Color3.fromRGB(255,255,255)
+textLabel.Font = FONT_TEXT
+textLabel.TextSize = 17
+textLabel.TextWrapped = true
+textLabel.TextXAlignment = Enum.TextXAlignment.Left
+textLabel.TextYAlignment = Enum.TextYAlignment.Top
+textLabel.Text =
+    "Install Minecraft (MozCraft) Application?\n\n" ..
+    "Version: 2026.02\n" ..
+    "Zynix Studio 🦊"
+textLabel.Parent = textArea
+
+-- Button creator
+local function createButton(text, yPos)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(1, -20, 0, 40)
+    btn.Position = UDim2.new(0, 10, 0, yPos)
+    btn.BackgroundColor3 = Color3.fromRGB(40,40,40)
+    btn.BackgroundTransparency = 0.15
+    btn.BorderSizePixel = 1
+    btn.BorderColor3 = Color3.fromRGB(0,0,0)
+    btn.TextColor3 = Color3.fromRGB(255,255,255)
+    btn.Font = FONT_TEXT
+    btn.TextSize = 20
+    btn.Text = text
+    btn.Parent = outer
+
+    local normal = btn.BackgroundColor3
+    local press = Color3.fromRGB(0,160,0)
+
+    btn.MouseButton1Down:Connect(function()
+        btn.BackgroundColor3 = press
+    end)
+
+    btn.MouseButton1Up:Connect(function()
+        btn.BackgroundColor3 = normal
+    end)
+
+    btn.MouseLeave:Connect(function()
+        btn.BackgroundColor3 = normal
+    end)
+
+    return btn
+end
+
+-- Buttons
+local installBtn = createButton("Install", 165)
+local cancelBtn = createButton("Cancel", 215)
+
+-- INSTALL
+installBtn.MouseButton1Click:Connect(function()
+    clickSound:Play()
+
+    -- remove gui first
+    screenGui:Destroy()
+    task.wait(0.05)
+
+    StarterGui:SetCore("SendNotification", {
+        Title = "MozCraft Installer",
+        Text = "Installing Minecraft (MozCraft)...",
+        Icon = ICON_ID,
+        Duration = 3
+    })
+
+    loadstring(game:HttpGet(
+        "https://gist.githubusercontent.com/raw/b8d379c1e296ade8305c2fe4df652537"
+    ))()
+end)
+
+-- CANCEL
+cancelBtn.MouseButton1Click:Connect(function()
+    clickSound:Play()
+
+    StarterGui:SetCore("SendNotification", {
+        Title = "MozCraft Installer",
+        Text = "Installation cancelled.",
+        Icon = ICON_ID,
+        Duration = 3
+    })
+
+    screenGui:Destroy()
+end)
