@@ -228,7 +228,7 @@ skipBtn.MouseButton1Click:Connect(doFadeOut)
 
 -- Execute external script while loading
 spawn(function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/SkyeMozScripts/ZynixStudio/refs/heads/main/MozCraft/Install"))()
+	
 end)
 
 -- Start loading
